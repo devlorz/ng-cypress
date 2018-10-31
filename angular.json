@@ -2,13 +2,137 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "",
-  "projects": {},
+  "projects": {
+    "myapp-myapp": {
+      "root": "apps/myapp/myapp/",
+      "sourceRoot": "apps/myapp/myapp/src",
+      "projectType": "application",
+      "prefix": "ng-cypress",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/myapp/myapp",
+            "index": "apps/myapp/myapp/src/index.html",
+            "main": "apps/myapp/myapp/src/main.ts",
+            "polyfills": "apps/myapp/myapp/src/polyfills.ts",
+            "tsConfig": "apps/myapp/myapp/tsconfig.app.json",
+            "assets": [
+              "apps/myapp/myapp/src/favicon.ico",
+              "apps/myapp/myapp/src/assets"
+            ],
+            "styles": [
+              "apps/myapp/myapp/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/myapp/myapp/src/environments/environment.ts",
+                  "with": "apps/myapp/myapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "myapp-myapp:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "myapp-myapp:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "myapp-myapp:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/myapp/myapp/tsconfig.app.json",
+              "apps/myapp/myapp/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/myapp/myapp/jest.config.js",
+            "tsConfig": "apps/myapp/myapp/tsconfig.spec.json",
+            "setupFile": "apps/myapp/myapp/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "myapp-myapp-e2e": {
+      "root": "apps/myapp/myapp-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/builders:cypress",
+          "options": {
+            "cypressConfig": "apps/myapp/myapp-e2e/cypress.json",
+            "tsConfig": "apps/myapp/myapp-e2e/tsconfig.e2e.json",
+            "devServerTarget": "myapp-myapp:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "myapp-myapp:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "warnings": {
       "typescriptMismatch": false,
       "versionMismatch": false
     },
     "defaultCollection": "@nrwl/schematics"
-    
-  }
+  },
+  "defaultProject": "myapp-myapp"
 }
